@@ -1,0 +1,83 @@
+{% extends 'html/base.html' %}
+{% load static %}
+{% block title %}<title>{{profile.user.first_name}}|Profile</title>{% endblock %}
+ {% block css %}<link rel="stylesheet" href="{% static 'css/profile.css' %}"> {% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div id="profile" >
+        <div class="user-profile">
+                <img src={{profile.profile_pic.url}} alt="pic" />
+
+                <p class="f-name">{{profile.user.first_name}}</p>
+                <p>{{profile.user.email}}</p>
+               <p>{{profile.neighborhood}}</p>
+        </div>
+
+    <div class="">
+
+    <form class="up-form" method="post" enctype="multipart/form-data">
+          {% for message in messages %}
+    <div class="alert alert-danger" role="alert">
+     {{message}}
+     </div>
+    {% endfor %}
+    <h4 claas="r-header">Update Profile</h4>
+    {% csrf_token %}
+<div class="divide">
+  <div class="form-group">
+    <label for="username">Username</label>
+   <input type="text" class="form-control" name="username"  value="{{profile.user.username}}" id="username" autofocus>
+  </div>
+
+  <div class="form-group">
+    <label for="fullname">First Name</label>
+   <input type="text" class="form-control" name="fullname" value="{{profile.user.first_name}}" id="fullname">
+  </div>
+</div>
+
+  <div class="form-group">
+      <label for="email">Email</label>
+    <input type="email" class="form-control" name="email" value="{{profile.user.email}}" id="email" >
+  </div>
+
+  <div class="form-group">
+      <label for="profile_pic">Profile Pic</label>
+    <input type="file" class="form-control" name="profile_pic"  id="profile_pic" accept="media/*" required="">
+  </div>
+
+  <button type="submit" class="up-btn btn btn-primary">Update</button>
+</form>
+    </div>
+
+</div>
+
+<div class="danger-zone">
+<h4 class="h-d">Danger Zone</h4>
+ <a href="/delete-account/{{profile.user.id}}" class=" delete-a btn btn-danger"> <i class="material-icons">person_remove</i>Delete Account</a>
+</div>
+
+
+    <div class="projects">
+        <h3>My Projects</h3>
+    <div id="repos">
+        {% for project in projects %}
+        <div class="user-repo">
+            <img class="project-pic" src="{{project.project_pic.url}}" alt="" />
+            <p>{{project.name}}</p>
+               <p>{{project.description}}</p>
+              <a href="{{project.live_link}}" target="_blank" ><i class="material-icons">link</i></a>
+            </div>`
+
+        {% endfor %}
+    </div>
+</div>
+
+</div>
+
+
+</body>
+</html>
+
+{% endblock %}

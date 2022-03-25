@@ -1,0 +1,131 @@
+{% extends 'html/base.html' %}
+{% load static %}
+{% block css %}<link rel="stylesheet" href="{% static 'css/index.css' %}" >{% endblock %}
+{% block title %}<title>TrendIt</title>{% endblock %}
+{% block content %}
+
+<div class="post-container">
+
+<div class="left-side">
+<form class="post-f" action="/post-question/" method="post">
+    {% csrf_token %}
+    <div class="form-floating">
+      <textarea class="form-control" placeholder="Ask a question!" required name="post" id="post" style="height: 150px; color:white; background-color:#0f0c22 !important; border:none"></textarea>
+    </div>
+    <button type="submit" class="sbtn btn btn-primary">Post Question</button>
+</form>
+
+ <div class="posts">
+{% for post in posts %}
+    <div class="card">
+      <div class="card-head">
+      <span class="user-info"><img class="avatar" src="{{post.user.profile.profile_pic.url}}">
+          <span class="user-name">{{post.user.username}}</span></span>
+          <span class="date">{{post.posted_at}}</span>
+      </div>
+        <div class="card-body">
+            <span class="likes">
+                <a id="a-like" class="a-like" href="/like/{{post.id}}"><i class="material-icons">thumb_up</i></a>
+                <span>{{post.likes}}</span>
+        <a href="/dislike/{{post.id}}"><i class="material-icons">thumb_down</i></a>
+            </span>
+        <span class="card-text">{{post.content}}</span>
+        </div>
+
+        <div class="card-actions">
+  <a style="color:white;" href="/get-comments/{{post.id}}" data-toggle="modal" data-target="#exampleModalLong">
+    <i class="material-icons">question_answer</i><span>{{post.comments}}</span>
+  </a>
+    <a style="color:white;" href="" data-toggle="modal" data-target="#exampleModal">
+    <i class="material-icons">chat_bubble_outline</i><span>comment</span>
+    </a>
+     <a style="color:white;" data-toggle="collapse" href="#">
+    <i class="material-icons">share</i>
+   </a>
+</div>
+</div>
+
+
+     <!--    Comment Form Modal-->
+ <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Comment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+     <form action="/add-comment/{{post.id}}" method="post">
+    {% csrf_token %}
+    <div class="form-floating">
+      <textarea class="form-control" placeholder="Comment!" name="comment" id="comment" style="height: 100px"></textarea>
+    </div>
+   <button style="margin-top:20px;" type="submit" class="btn btn-secondary">Add comment</button>
+</form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--Comments modal-->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Comments</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        {% for comment in comments %}
+      <div class="modal-body">
+          <div class="comment-head">
+      <span class="user-info"><img class="avatar" src="{{comment.user.profile.profile_pic.url}}">
+          <span>{{comment.user.username}}</span></span>
+      </div>
+       <p class="reply-text">{{comment.reply}}</p>
+
+      </div>
+{% endfor %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+{% endfor %}
+</div>
+
+</div>
+
+
+<div class="right-side">
+
+    <h4>Topics you can follow</h4>
+    <div class="topics card ">
+       <p>Technology</p>
+        <p>Web Dev</p>
+        <p>Google APIs</p>
+        <p>React js</p>
+        <p>Django</p>
+        <p>Python</p>
+    </div>
+</div>
+
+
+
+</div>
+
+{% endblock %}
+
+</body>
+</html>

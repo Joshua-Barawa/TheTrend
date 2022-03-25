@@ -1,0 +1,1 @@
+web: gunicorn trendit2.wsgi --log-file -
